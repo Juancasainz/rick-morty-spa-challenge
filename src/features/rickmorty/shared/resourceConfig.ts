@@ -2,12 +2,6 @@ import LocationPlaceHolder from "@/shared/assets/LocationPlaceHolder.png";
 import EpisodePlaceHolder from "@/shared/assets/EpisodePlaceHolder.png";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 
-export const RESOURCE_LABEL: Record<ResourceType, string> = {
-  characters: "Characters",
-  episodes: "Episodes",
-  locations: "Locations",
-};
-
 export function getItemImage(resource: ResourceType, item: any): string {
   switch (resource) {
     case "characters":

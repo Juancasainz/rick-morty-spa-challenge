@@ -1,7 +1,7 @@
 import { getJson } from "@/shared/lib/http/httpClient";
 import type { ResourceMap, ResourceType } from "@/features/rickmorty/model/types";
 
-type ApiInfo = {
+export type ApiInfo = {
   count: number;
   pages: number;
   next: string | null;
