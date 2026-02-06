@@ -49,7 +49,7 @@ export const RickMortyHomePage: React.FC = () => {
     return { page: safePage, name, type: type || undefined, dimension: dimension || undefined };
   }, [safeResource, safePage, name, status, gender, episode, type, dimension]);
 
-  const { items, info, isLoading, error } = useResourceList(safeResource, params as any, "title", safeDir);
+  const { items, info, isLoading, error } = useResourceList(safeResource, params as any, "name", safeDir);
 
   const canPrev = safePage > 1;
   const canNext = info ? safePage < info.pages : false;

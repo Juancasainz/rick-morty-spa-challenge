@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 import { useResourceDetails } from "@/features/rickmorty/hooks/useResourceDetails";
-import { RESOURCE_LABEL, getItemImage, getItemTitle } from "@/features/rickmorty/shared/resourceConfig";
+import { RESOURCE_LABEL, getItemImage } from "@/features/rickmorty/shared/resourceConfig";
 import { Image } from "@/shared/ui/Image";
 import { Spinner } from "@/shared/ui/Spinner";
 import { Button } from "@/shared/ui/Button";
@@ -28,8 +28,6 @@ export const RickMortyDetailPage: React.FC = () => {
   const id = params.id;
 
   const { item, isLoading, error } = useResourceDetails(resource, id);
-
-  const title = item ? getItemTitle(item) : "";
   const imageSrc = item ? getItemImage(resource, item) : undefined;
 
   return (
@@ -59,11 +57,10 @@ export const RickMortyDetailPage: React.FC = () => {
           <div className="md:col-span-5">
             <div className="rounded-2xl border border-black/10 bg-white overflow-hidden">
               <div className="aspect-[4/3] bg-black/5">
-                <Image src={imageSrc} alt={title} className="w-full h-full object-cover" />
+                <Image src={imageSrc} alt={item?.name} className="w-full h-full object-cover" />
               </div>
               <div className="p-4">
-                <h2 className="text-xl font-semibold">{title}</h2>
-                <p className="text-sm text-black/60 mt-1">ID: {(item as any).id}</p>
+                <h2 className="text-xl font-semibold">{item?.name}</h2>
               </div>
             </div>
           </div>

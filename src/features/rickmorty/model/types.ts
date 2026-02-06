@@ -1,17 +1,5 @@
 export type ResourceType = "characters" | "episodes" | "locations";
 
-export type ApiInfo = {
-  count: number;
-  pages: number;
-  next: string | null;
-  prev: string | null;
-};
-
-export type ApiListResponse<T> = {
-  info: ApiInfo;
-  results: T[];
-};
-
 export type CharacterStatus = "Alive" | "Dead" | "unknown";
 export type CharacterGender = "Female" | "Male" | "Genderless" | "unknown";
 
@@ -55,3 +43,5 @@ export type ResourceMap = {
   episodes: Episode;
   locations: Location;
 };
+
+export type Resource = Location | Character | Episode;
