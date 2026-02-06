@@ -1,4 +1,5 @@
-import placeholderImg from "@/shared/assets/placeholder.jpg";
+import LocationPlaceHolder from "@/shared/assets/LocationPlaceHolder.png";
+import EpisodePlaceHolder from "@/shared/assets/EpisodePlaceHolder.png";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 
 export const RESOURCE_LABEL: Record<ResourceType, string> = {
@@ -7,13 +8,17 @@ export const RESOURCE_LABEL: Record<ResourceType, string> = {
   locations: "Locations",
 };
 
-export function getItemTitle(item: any): string {
-  return item?.name ?? "";
-}
-
 export function getItemImage(resource: ResourceType, item: any): string {
-  if (resource === "characters") return item.image as string;
-  return placeholderImg;
+  switch (resource) {
+    case "characters":
+      return item.image;
+    case "episodes":
+      return EpisodePlaceHolder;
+    case "locations":
+      return LocationPlaceHolder;
+    default:
+      return "";
+  }
 }
 
 export function getItemSubtitle(resource: ResourceType, item: any): string {

@@ -1,5 +1,17 @@
 import { getJson } from "@/shared/lib/http/httpClient";
-import type { ApiListResponse, ResourceMap, ResourceType } from "@/features/rickmorty/model/types";
+import type { ResourceMap, ResourceType } from "@/features/rickmorty/model/types";
+
+type ApiInfo = {
+  count: number;
+  pages: number;
+  next: string | null;
+  prev: string | null;
+};
+
+export type ApiListResponse<T> = {
+  info: ApiInfo;
+  results: T[];
+};
 
 const ENDPOINT_BY_RESOURCE: Record<ResourceType, string> = {
   characters: "character",
@@ -16,7 +28,7 @@ export type CharacterListParams = CommonListParams & {
 };
 
 export type EpisodeListParams = CommonListParams & {
-  episode?: string; // e.g. "S01"
+  episode?: string;
 };
 
 export type LocationListParams = CommonListParams & {
