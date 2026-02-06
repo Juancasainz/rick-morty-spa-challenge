@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 import { useResourceDetails } from "@/features/rickmorty/hooks/useResourceDetails";
-import { RESOURCE_LABEL, getItemImage } from "@/features/rickmorty/shared/resourceConfig";
+import { getItemImage } from "@/features/rickmorty/shared/resourceConfig";
 import { Image } from "@/shared/ui/Image";
 import { Spinner } from "@/shared/ui/Spinner";
 import { Button } from "@/shared/ui/Button";
@@ -36,7 +36,7 @@ export const RickMortyDetailPage: React.FC = () => {
         <Link to={`/?resource=${resource}`}>
           <Button>← Back</Button>
         </Link>
-        <span className="text-sm text-black/60">{RESOURCE_LABEL[resource]} details</span>
+        <span className="text-sm text-black/60">{resource} details</span>
       </div>
 
       {isLoading && (
