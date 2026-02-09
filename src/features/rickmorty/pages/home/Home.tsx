@@ -13,11 +13,7 @@ export const RickMortyHomePage: React.FC = () => {
     <div className="space-y-4">
       <ControlBar pages={info?.pages} />
 
-      {isLoading && (
-        <div className="flex items-center justify-center py-10">
-          <Spinner />
-        </div>
-      )}
+      { isLoading && <Spinner /> }
 
       {error && (
         <div className="rounded-2xl border border-red-300 bg-red-50 p-4 text-sm">
@@ -29,7 +25,7 @@ export const RickMortyHomePage: React.FC = () => {
       {!isLoading && !error && (
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items.map((item) => (
-            <ItemCard key={`${q.resource}-${item}`} resource={q.resource} item={item} />
+            <ItemCard key={`${q.resource}-${item.id}`} resource={q.resource} item={item} />
           ))}
         </section>
       )}

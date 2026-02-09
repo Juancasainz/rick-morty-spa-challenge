@@ -37,8 +37,7 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
         <div className="md:col-span-4">
           <label className="text-sm font-medium">Search</label>
           <input
-            value={q.name}
-            onChange={(e) => q.set({ name: e.target.value })}
+            {...q.bindText("name")}
             placeholder="Type a name..."
             className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
           />
@@ -81,8 +80,7 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
           <div className="md:col-span-6">
             <label className="text-sm font-medium">Episode</label>
             <input
-              value={q.episode}
-              onChange={(e) => q.set({ episode: e.target.value })}
+              {...q.bindText("episode")}
               placeholder="e.g. S01 or S01E05"
               className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
             />
@@ -94,16 +92,14 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
             <div className="md:col-span-3">
               <label className="text-sm font-medium">Type</label>
               <input
-                value={q.type}
-                onChange={(e) => q.set({ type: e.target.value })}
+                {...q.bindText("type")}
                 className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
               />
             </div>
             <div className="md:col-span-3">
               <label className="text-sm font-medium">Dimension</label>
               <input
-                value={q.dimension}
-                onChange={(e) => q.set({ dimension: e.target.value })}
+                {...q.bindText("dimension")}
                 className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
               />
             </div>
