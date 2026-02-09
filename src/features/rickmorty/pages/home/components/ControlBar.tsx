@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/Button";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 import { useSearchParamsQuery } from "@/features/rickmorty/shared/useSearchParamsQuery.ts";
 import { Pagination } from "./Pagination";
+import { Input } from "@/shared/ui/Input";
 
 const RESOURCES: ResourceType[] = ["characters", "episodes", "locations"];
 
@@ -35,20 +36,21 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
 
       <div className="grid gap-3 md:grid-cols-12">
         <div className="md:col-span-4">
-          <label className="text-sm font-medium">Search</label>
-          <input
+          <Input
             {...q.bindText("name")}
+            id="search"
+            title={'Search'}
             placeholder="Type a name..."
-            className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
           />
         </div>
 
         {q.resource === "characters" && (
           <>
             <div className="md:col-span-3">
-              <label className="text-sm font-medium">Status</label>
+              <label className="text-sm font-medium" htmlFor="status">Status</label>
               <select
                 value={q.status}
+                id="status"
                 onChange={(e) => q.set({ status: e.target.value })}
                 className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm bg-white"
               >
@@ -60,9 +62,10 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
             </div>
 
             <div className="md:col-span-3">
-              <label className="text-sm font-medium">Gender</label>
+              <label className="text-sm font-medium" htmlFor="gender">Gender</label>
               <select
                 value={q.gender}
+                id="gender"
                 onChange={(e) => q.set({ gender: e.target.value })}
                 className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm bg-white"
               >
@@ -78,11 +81,11 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
 
         {q.resource === "episodes" && (
           <div className="md:col-span-6">
-            <label className="text-sm font-medium">Episode</label>
-            <input
+            <Input
               {...q.bindText("episode")}
+              id="episode"
+              title={'Episode:'}
               placeholder="e.g. S01 or S01E05"
-              className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
             />
           </div>
         )}
@@ -90,17 +93,17 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
         {q.resource === "locations" && (
           <>
             <div className="md:col-span-3">
-              <label className="text-sm font-medium">Type</label>
-              <input
+              <Input
                 {...q.bindText("type")}
-                className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
+                id="type"
+                title={'Type'}
               />
             </div>
             <div className="md:col-span-3">
-              <label className="text-sm font-medium">Dimension</label>
-              <input
+               <Input
                 {...q.bindText("dimension")}
-                className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm"
+                id="dimension"
+                title={'Dimension'}
               />
             </div>
           </>

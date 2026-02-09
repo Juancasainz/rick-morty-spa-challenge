@@ -16,9 +16,9 @@ function isResourceType(value: string | undefined): value is ResourceType {
 
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-black/10 p-3">
-      <div className="text-xs uppercase tracking-wide text-black/50">{label}</div>
-      <div className="mt-1 text-sm">{value || <span className="text-black/50">—</span>}</div>
+    <div className="rounded-xl border border-black/10 p-3 bg-black">
+      <div className="text-xs uppercase tracking-wide">{label}</div>
+      <div className="mt-1 text-sm">{value || "—"}</div>
     </div>
   );
 }

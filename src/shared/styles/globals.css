@@ -1,5 +1,183 @@
 @import "tailwindcss";
 
-/* globals mínimos */
-html, body, #root { height: 100%; }
-body { margin: 0; }
+/*
+  Alien / sci-fi skin (CSS-only)
+  Inspired by panoramic neon / oscilloscope vibes.
+  We keep Tailwind classnames, but override a few frequently used utilities
+  so existing components pick up the new look automatically.
+*/
+
+/*
+  TODO: standarize colors and design tokens
+*/
+
+:root {
+  /* palette */
+  --bg0: #05060a;
+  --bg1: #080a16;
+  --panel: rgba(10, 16, 30, 0.76);
+  --panelSolid: #0b1224;
+  --text: rgba(236, 244, 255, 0.92);
+  --muted: rgba(236, 244, 255, 0.66);
+  --border: rgba(120, 255, 230, 0.16);
+  --border2: rgba(158, 126, 255, 0.18);
+  --glow: rgba(120, 255, 230, 0.22);
+  --glow2: rgba(158, 126, 255, 0.22);
+  --danger: rgba(255, 102, 156, 0.16);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+
+background:
+    radial-gradient(1200px 700px at 15% 10%, rgba(120, 255, 230, 0.16), transparent 55%),
+    radial-gradient(900px 600px at 85% 25%, rgba(158, 126, 255, 0.14), transparent 60%),
+    linear-gradient(180deg, rgba(5, 6, 10, 0.35), rgba(8, 10, 22, 0.55)),
+    url("/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-blend-mode: screen, screen, multiply, normal;
+
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+}
+
+
+/* Subtle grid + scanline overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(transparent 0 23px, rgba(120, 255, 230, 0.07) 24px),
+    linear-gradient(90deg, transparent 0 23px, rgba(158, 126, 255, 0.06) 24px);
+  background-size: 24px 24px;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 2px,
+    transparent 6px
+  );
+  opacity: 0.09;
+}
+
+/* --- Utility overrides (target the app's existing Tailwind classes) --- */
+
+.bg-white {
+  background-color: var(--panel) !important;
+  backdrop-filter: blur(10px);
+}
+
+.bg-red-50 {
+  background-color: rgba(255, 102, 156, 0.10) !important;
+}
+
+.border-black\/10 {
+  border-color: var(--border) !important;
+}
+
+.border-black\/20 {
+  border-color: rgba(120, 255, 230, 0.22) !important;
+}
+
+.text-black\/70,
+.text-black\/60 {
+  color: var(--muted) !important;
+}
+
+.bg-black\/5 {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+.bg-black {
+  background:
+    radial-gradient(120% 200% at 20% 10%, rgba(120, 255, 230, 0.28), transparent 55%),
+    radial-gradient(120% 200% at 80% 0%, rgba(158, 126, 255, 0.28), transparent 55%),
+    linear-gradient(180deg, rgba(10, 18, 34, 0.92), rgba(8, 12, 24, 0.92)) !important;
+}
+
+/* Cards + panels */
+.rounded-2xl {
+  box-shadow:
+    0 0 0 1px rgba(120, 255, 230, 0.10),
+    0 16px 44px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(120, 255, 230, 0.08);
+}
+
+.hover\:shadow-sm:hover {
+  box-shadow:
+    0 0 0 1px rgba(158, 126, 255, 0.18),
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 56px rgba(158, 126, 255, 0.16);
+}
+
+/* Inputs */
+input,
+select {
+  color: var(--text);
+  background-color: rgba(5, 10, 20, 0.55);
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(236, 244, 255, 0.38);
+}
+
+input:focus,
+select:focus {
+  box-shadow:
+    0 0 0 1px rgba(120, 255, 230, 0.35),
+    0 0 0 4px rgba(120, 255, 230, 0.10);
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 255, 230, 0.35) rgba(0, 0, 0, 0.25);
+}
+
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(120, 255, 230, 0.35), rgba(158, 126, 255, 0.30));
+  border-radius: 999px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

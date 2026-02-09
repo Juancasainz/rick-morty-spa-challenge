@@ -36,9 +36,6 @@ export function RelatedCarousel({ resource, item }: { resource: any; item: any }
                 <h3 className="text-base font-semibold">
                     Related {relatedResource} ({total})
                 </h3>
-                <p className="text-sm text-black/60">
-                    {loaded < total ? `Showing ${loaded} — scroll for more →` : "All loaded"}
-                </p>
             </div>
 
             <div
