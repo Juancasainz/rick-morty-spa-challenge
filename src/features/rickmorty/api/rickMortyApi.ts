@@ -58,3 +58,16 @@ export async function fetchResourceById<R extends ResourceType>(
 ): Promise<ResourceMap[R]> {
   return await getJson<ResourceMap[R]>(`/${ENDPOINT_BY_RESOURCE[resource]}/${id}`);
 }
+
+export async function fetchResourceMany<R extends ResourceType>(
+  resource: R,
+  ids: Array<string | number>
+): Promise<ResourceMap[R][]> {
+  if (!ids.length) return [];
+
+  const data = await getJson<ResourceMap[R] | ResourceMap[R][]>(
+    `/${ENDPOINT_BY_RESOURCE[resource]}/${ids.join(",")}`
+  );
+
+  return Array.isArray(data) ? data : [data];
+}

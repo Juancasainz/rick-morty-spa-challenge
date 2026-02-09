@@ -6,6 +6,7 @@ import { getItemImage } from "@/features/rickmorty/shared/resourceConfig";
 import { Image } from "@/shared/ui/Image";
 import { Spinner } from "@/shared/ui/Spinner";
 import { Button } from "@/shared/ui/Button";
+import { RelatedCarousel } from "./RelatedCarousel";
 
 const RESOURCE_OPTIONS: ResourceType[] = ["characters", "episodes", "locations"];
 
@@ -40,9 +41,7 @@ export const RickMortyDetailPage: React.FC = () => {
       </div>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-10">
           <Spinner />
-        </div>
       )}
 
       {error && (
@@ -73,7 +72,6 @@ export const RickMortyDetailPage: React.FC = () => {
                 <Field label="Gender" value={(item as any).gender} />
                 <Field label="Origin" value={(item as any).origin?.name} />
                 <Field label="Last known location" value={(item as any).location?.name} />
-                <Field label="Episodes" value={(item as any).episode?.length} />
               </>
             )}
 
@@ -81,7 +79,6 @@ export const RickMortyDetailPage: React.FC = () => {
               <>
                 <Field label="Code" value={(item as any).episode} />
                 <Field label="Air date" value={(item as any).air_date} />
-                <Field label="Characters" value={(item as any).characters?.length} />
               </>
             )}
 
@@ -89,12 +86,12 @@ export const RickMortyDetailPage: React.FC = () => {
               <>
                 <Field label="Type" value={(item as any).type} />
                 <Field label="Dimension" value={(item as any).dimension} />
-                <Field label="Residents" value={(item as any).residents?.length} />
               </>
             )}
           </div>
         </section>
       )}
+    <RelatedCarousel resource={resource} item={item} />
     </div>
   );
 };
