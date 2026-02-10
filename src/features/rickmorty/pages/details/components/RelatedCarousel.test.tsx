@@ -1,14 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { RelatedCarousel } from "./RelatedCarousel";
 
 const useRelatedItemsMock = vi.fn();
 
 vi.mock("@/features/rickmorty/hooks/useRelatedItems", () => ({
   useRelatedItems: (...args: any[]) => useRelatedItemsMock(...args),
 }));
-
-import { RelatedCarousel } from "./RelatedCarousel";
 
 describe("RelatedCarousel", () => {
   beforeEach(() => {

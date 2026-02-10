@@ -1,7 +1,7 @@
 import React from "react";
 import { ItemCard } from "@/features/rickmorty/shared/ItemCard";
 import { useRelatedItems } from "@/features/rickmorty/hooks/useRelatedItems";
-import { Spinner } from "@/shared/ui/Spinner";
+import { Spinner } from "@/shared/ui";
 
 const STEP = 8;
 

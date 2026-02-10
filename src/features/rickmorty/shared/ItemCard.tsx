@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import type { Resource, ResourceType } from "@/features/rickmorty/model/types";
 import { getItemImage, getItemSubtitle } from "@/features/rickmorty/shared/resourceConfig";
-import { Image } from "@/shared/ui/Image";
+import { Image } from "@/shared/ui";
 
 type Props = {
   resource: ResourceType;

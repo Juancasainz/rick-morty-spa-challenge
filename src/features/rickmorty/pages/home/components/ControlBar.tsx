@@ -1,17 +1,50 @@
 import React from "react";
-import { Button } from "@/shared/ui/Button";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 import { useSearchParamsQuery } from "@/features/rickmorty/shared/useSearchParamsQuery.ts";
 import { Pagination } from "./Pagination";
-import { Input } from "@/shared/ui/Input";
+import { Button, Input, Select } from "@/shared/ui";
 
 const RESOURCES: ResourceType[] = ["characters", "episodes", "locations"];
+
+const STATUS_OPTIONS = {
+  alive: "Alive",
+  dead: "Dead",
+  unknown: "Unknown",
+} as const;
+
+const GENDER_OPTIONS = {
+  female: "Female",
+  male: "Male",
+  genderless: "Genderless",
+  unknown: "Unknown",
+} as const;
+
+const SORT_OPTIONS = {
+  asc: "Title ↑",
+  desc: "Title ↓",
+} as const;
+
+const RESET_FILTERS_PATCH = {
+  name: undefined,
+  status: undefined,
+  gender: undefined,
+  episode: undefined,
+  type: undefined,
+  dimension: undefined,
+} as const;
+
+const RESET_RESOURCE_SPECIFIC_PATCH = {
+  status: undefined,
+  gender: undefined,
+  episode: undefined,
+  type: undefined,
+  dimension: undefined,
+} as const;
 
 export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
   const q = useSearchParamsQuery();
 
-  const clear = () =>
-    q.set({ name: undefined, status: undefined, gender: undefined, episode: undefined, type: undefined, dimension: undefined });
+  const clear = () => q.set(RESET_FILTERS_PATCH);
 
   return (
     <section className="rounded-2xl border border-black/10 bg-white p-4 space-y-3">
@@ -26,7 +59,7 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
             <Button
               key={r}
               variant={r === q.resource ? "primary" : "secondary"}
-              onClick={() => q.set({ resource: r, status: undefined, gender: undefined, episode: undefined, type: undefined, dimension: undefined })}
+              onClick={() => q.set({ resource: r, ...RESET_RESOURCE_SPECIFIC_PATCH })}
             >
               {r}
             </Button>
@@ -47,34 +80,25 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
         {q.resource === "characters" && (
           <>
             <div className="md:col-span-3">
-              <label className="text-sm font-medium" htmlFor="status">Status</label>
-              <select
-                value={q.status}
+              <Select
                 id="status"
-                onChange={(e) => q.set({ status: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm bg-white"
-              >
-                <option value="">Any</option>
-                <option value="alive">Alive</option>
-                <option value="dead">Dead</option>
-                <option value="unknown">Unknown</option>
-              </select>
+                title="Status"
+                value={q.status}
+                placeholder="Any"
+                options={STATUS_OPTIONS}
+                onChange={(v) => q.set({ status: v })}
+              />
             </div>
 
             <div className="md:col-span-3">
-              <label className="text-sm font-medium" htmlFor="gender">Gender</label>
-              <select
-                value={q.gender}
+              <Select
                 id="gender"
-                onChange={(e) => q.set({ gender: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm bg-white"
-              >
-                <option value="">Any</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="genderless">Genderless</option>
-                <option value="unknown">Unknown</option>
-              </select>
+                title="Gender"
+                value={q.gender}
+                placeholder="Any"
+                options={GENDER_OPTIONS}
+                onChange={(v) => q.set({ gender: v })}
+              />
             </div>
           </>
         )}
@@ -100,7 +124,7 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
               />
             </div>
             <div className="md:col-span-3">
-               <Input
+              <Input
                 {...q.bindText("dimension")}
                 id="dimension"
                 title={'Dimension'}
@@ -110,21 +134,24 @@ export const ControlBar: React.FC<{ pages?: number }> = ({ pages }) => {
         )}
 
         <div className="md:col-span-2">
-          <label className="text-sm font-medium">Sort</label>
-          <select
+          <Select
+            id="dir"
+            title="Sort"
             value={q.dir}
-            onChange={(e) => q.set({ dir: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-black/20 px-3 py-2 text-sm bg-white"
-          >
-            <option value="asc">Title ↑</option>
-            <option value="desc">Title ↓</option>
-          </select>
+            options={SORT_OPTIONS}
+            onChange={(v) => q.set({ dir: v })}
+          />
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Button onClick={clear}>Clear filters</Button>
-        <Pagination page={q.page} pages={pages} />
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <Button className="w-full sm:w-auto" onClick={clear}>
+          Clear filters
+        </Button>
+
+        <div className="sm:ml-auto">
+          <Pagination page={q.page} pages={pages} />
+        </div>
       </div>
     </section>
   );

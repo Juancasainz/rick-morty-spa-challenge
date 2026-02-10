@@ -1,7 +1,7 @@
 import React from "react";
 import { useResourceList } from "@/features/rickmorty/hooks/useResourceList";
 import { ItemCard } from "@/features/rickmorty/shared/ItemCard";
-import { Spinner } from "@/shared/ui/Spinner";
+import { Spinner } from "@/shared/ui";
 import { ControlBar } from "./components/ControlBar";
 import { useSearchParamsQuery } from "@/features/rickmorty/shared/useSearchParamsQuery.ts";
 
