@@ -25,7 +25,7 @@ export const RickMortyDetailPage: React.FC = () => {
       {isLoading && <Spinner />}
 
       {error && (
-        <div className="p-4 text-sm" style={{ borderColor: "rgba(255,102,156,0.35)" }}>
+        <div className="p-4 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm">
           <p className="font-semibold">Couldn’t load details.</p>
           <p className="mt-1">The item may not exist.</p>
         </div>
