@@ -1,32 +1,14 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import type { ResourceType } from "@/features/rickmorty/model/types";
 import { useResourceDetails } from "@/features/rickmorty/hooks/useResourceDetails";
-import { getItemImage } from "@/features/rickmorty/shared/resourceConfig";
-import { Image } from "@/shared/ui/Image";
-import { Spinner } from "@/shared/ui/Spinner";
-import { Button } from "@/shared/ui/Button";
-import { RelatedCarousel } from "./RelatedCarousel";
-
-const RESOURCE_OPTIONS: ResourceType[] = ["characters", "episodes", "locations"];
-
-function isResourceType(value: string | undefined): value is ResourceType {
-  return !!value && (RESOURCE_OPTIONS as readonly string[]).includes(value);
-}
-
-function Field({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="rounded-xl border border-black/10 p-3 bg-black">
-      <div className="text-xs uppercase tracking-wide">{label}</div>
-      <div className="mt-1 text-sm">{value || "—"}</div>
-    </div>
-  );
-}
+import { getItemImage, isCharacter, isEpisode, isLocation, isResourceType } from "@/features/rickmorty/shared/resourceConfig";
+import { Button, Field, Image, Spinner } from "@/shared/ui";
+import { RelatedCarousel } from "./components/RelatedCarousel";
 
 export const RickMortyDetailPage: React.FC = () => {
   const params = useParams();
   const resource = isResourceType(params.resource) ? params.resource : "characters";
-  const id = params.id;
+  const id = params.id ?? "";
 
   const { item, isLoading, error } = useResourceDetails(resource, id);
   const imageSrc = item ? getItemImage(resource, item) : undefined;
@@ -37,17 +19,15 @@ export const RickMortyDetailPage: React.FC = () => {
         <Link to={`/?resource=${resource}`}>
           <Button>← Back</Button>
         </Link>
-        <span className="text-sm text-black/60">{resource} details</span>
+        <span className="text-sm ">{resource} details</span>
       </div>
 
-      {isLoading && (
-          <Spinner />
-      )}
+      {isLoading && <Spinner />}
 
       {error && (
-        <div className="rounded-2xl border border-red-300 bg-red-50 p-4 text-sm">
+        <div className="p-4 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm">
           <p className="font-semibold">Couldn’t load details.</p>
-          <p className="text-black/70 mt-1">The item may not exist.</p>
+          <p className="mt-1">The item may not exist.</p>
         </div>
       )}
 
@@ -55,43 +35,41 @@ export const RickMortyDetailPage: React.FC = () => {
         <section className="grid gap-4 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="rounded-2xl border border-black/10 bg-white overflow-hidden">
-              <div className="aspect-[4/3] bg-black/5">
-                <Image src={imageSrc} alt={item?.name} className="w-full h-full object-cover" />
-              </div>
+              <Image src={imageSrc} alt={item.name} className="w-full h-full object-cover aspect-[4/3] bg-black/5" />
               <div className="p-4">
-                <h2 className="text-xl font-semibold">{item?.name}</h2>
+                <h2 className="text-xl font-semibold">{item.name}</h2>
               </div>
             </div>
           </div>
 
           <div className="md:col-span-7 grid gap-3 sm:grid-cols-2">
-            {resource === "characters" && (
+            {isCharacter(resource, item) && (
               <>
-                <Field label="Status" value={(item as any).status} />
-                <Field label="Species" value={(item as any).species} />
-                <Field label="Gender" value={(item as any).gender} />
-                <Field label="Origin" value={(item as any).origin?.name} />
-                <Field label="Last known location" value={(item as any).location?.name} />
+                <Field label="Status" value={item.status} />
+                <Field label="Species" value={item.species} />
+                <Field label="Gender" value={item.gender} />
+                <Field label="Origin" value={item.origin?.name} />
+                <Field label="Last known location" value={item.location?.name} />
               </>
             )}
 
-            {resource === "episodes" && (
+            {isEpisode(resource, item) && (
               <>
-                <Field label="Code" value={(item as any).episode} />
-                <Field label="Air date" value={(item as any).air_date} />
+                <Field label="Code" value={item.episode} />
+                <Field label="Air date" value={item.air_date} />
               </>
             )}
 
-            {resource === "locations" && (
+            {isLocation(resource, item) && (
               <>
-                <Field label="Type" value={(item as any).type} />
-                <Field label="Dimension" value={(item as any).dimension} />
+                <Field label="Type" value={item.type} />
+                <Field label="Dimension" value={item.dimension} />
               </>
             )}
           </div>
         </section>
       )}
-    <RelatedCarousel resource={resource} item={item} />
+      <RelatedCarousel resource={resource} item={item} />
     </div>
   );
 };
