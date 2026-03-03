@@ -2,11 +2,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { RelatedCarousel } from "./RelatedCarousel";
+import type { Resource, ResourceType } from "@/features/rickmorty/model/types";
 
 const useRelatedItemsMock = vi.fn();
 
 vi.mock("@/features/rickmorty/hooks/useRelatedItems", () => ({
-  useRelatedItems: (...args: any[]) => useRelatedItemsMock(...args),
+  useRelatedItems: (resource: ResourceType, item: Resource, limit: number) => useRelatedItemsMock(resource, item, limit),
 }));
 
 describe("RelatedCarousel", () => {
@@ -14,7 +15,7 @@ describe("RelatedCarousel", () => {
     useRelatedItemsMock.mockReset();
 
     // default mock: 8 loaded out of 16
-    useRelatedItemsMock.mockImplementation((_resource: any, _item: any, limit: number) => {
+    useRelatedItemsMock.mockImplementation((_resource: ResourceType, _item: Resource, limit: number) => {
       const total = 16;
       const loaded = Math.min(total, limit);
       const relatedItems = Array.from({ length: loaded }, (_, i) => ({

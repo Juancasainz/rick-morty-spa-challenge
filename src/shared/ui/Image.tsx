@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type ImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src?: string | null;
@@ -12,12 +12,7 @@ export function Image({
   placeholder = '../assets/CharacterPlaceHolder.png',
   ...rest
 }: ImageProps) {
-  const initial = src && src.trim() ? src : placeholder;
-  const [currentSrc, setCurrentSrc] = useState<string>(initial);
-
-  useEffect(() => {
-    setCurrentSrc(src && src.trim() ? src : placeholder);
-  }, [src, placeholder]);
+  const currentSrc = src?.trim() ? src : placeholder;
 
   return (
     <img
@@ -25,7 +20,6 @@ export function Image({
       alt={alt}
       src={currentSrc}
       onError={(e) => {
-        if (currentSrc !== placeholder) setCurrentSrc(placeholder);
         onError?.(e);
       }}
     />

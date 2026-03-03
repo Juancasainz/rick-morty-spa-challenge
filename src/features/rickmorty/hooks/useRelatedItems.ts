@@ -1,6 +1,7 @@
 import { useAsync } from "@/shared/lib/hooks/useAsync";
 import { fetchResourceMany } from "@/features/rickmorty/api/rickMortyApi";
-import type { ResourceType } from "@/features/rickmorty/model/types";
+import type { Resource, ResourceType } from "@/features/rickmorty/model/types";
+import { isCharacter, isEpisode } from "../shared/resourceConfig";
 
 export function idsFromUrls(urls: unknown): string[] {
   if (!Array.isArray(urls)) return [];
@@ -10,16 +11,16 @@ export function idsFromUrls(urls: unknown): string[] {
     .filter(Boolean) as string[];
 }
 
-export function useRelatedItems(resource: ResourceType, item: any, limit: number) {
+export function useRelatedItems(resource: ResourceType, item: Resource, limit: number) {
   const { relatedResource, ids } = (() => {
-    if (resource === "characters") return { relatedResource: "episodes" as const, ids: idsFromUrls(item?.episode) };
-    if (resource === "episodes") return { relatedResource: "characters" as const, ids: idsFromUrls(item?.characters) };
+    if (isCharacter(resource, item)) return { relatedResource: "episodes" as const, ids: idsFromUrls(item?.episode) };
+    if (isEpisode(resource, item)) return { relatedResource: "characters" as const, ids: idsFromUrls(item?.characters) };
     return { relatedResource: "characters" as const, ids: idsFromUrls(item?.residents) };
   })();
 
   const wanted = ids.slice(0, limit);
 
-  const { data, isLoading, error } = useAsync<any[]>(
+  const { data, isLoading, error } = useAsync<Resource[]>(
     async () => {
       if (!wanted.length) return [];
       return fetchResourceMany(relatedResource, wanted);

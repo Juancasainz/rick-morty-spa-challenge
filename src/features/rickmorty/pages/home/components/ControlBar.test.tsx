@@ -25,7 +25,7 @@ vi.mock("@/features/rickmorty/shared/useSearchParamsQuery.ts", () => {
 });
 
 vi.mock("./Pagination", () => ({
-  Pagination: ({ page, pages }: any) => (
+  Pagination: ({ page, pages }: { page: number; pages: number }) => (
     <div data-testid="pagination">
       Page {page} / {pages ?? "?"}
     </div>

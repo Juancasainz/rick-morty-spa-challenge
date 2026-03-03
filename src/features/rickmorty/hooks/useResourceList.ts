@@ -12,7 +12,6 @@ function compareStrings(a: string, b: string) {
 export function useResourceList<R extends ResourceType>(
   resource: R,
   params: ListParamsByResource[R],
-  sortBy: "name",
   dir: SortDir = "asc"
 ) {
   const { data, isLoading, error } = useAsync<ApiListResponse<ResourceMap[R]>>(
@@ -29,7 +28,7 @@ export function useResourceList<R extends ResourceType>(
       return dir === "asc" ? c : -c;
     });
     return copy;
-  }, [data, sortBy, dir]);
+  }, [data, dir]);
 
   return {
     info: data?.info,

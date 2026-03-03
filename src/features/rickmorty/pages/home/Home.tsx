@@ -4,10 +4,11 @@ import { ItemCard } from "@/features/rickmorty/shared/ItemCard";
 import { Spinner } from "@/shared/ui";
 import { ControlBar } from "./components/ControlBar";
 import { useSearchParamsQuery } from "@/features/rickmorty/shared/useSearchParamsQuery.ts";
+import type { Filter } from "../../model/types";
 
 export const RickMortyHomePage: React.FC = () => {
   const q = useSearchParamsQuery();
-  const { items, info, isLoading, error } = useResourceList(q.resource, q.params as any, "name", q.dir);
+  const { items, info, isLoading, error } = useResourceList(q.resource, q.params as Filter, q.dir);
 
   return (
     <div className="space-y-4">

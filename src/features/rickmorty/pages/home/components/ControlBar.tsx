@@ -1,8 +1,20 @@
 import React from "react";
-import type { ResourceType } from "@/features/rickmorty/model/types";
+import type { CharacterGender, CharacterStatus, ResourceType } from "@/features/rickmorty/model/types";
 import { useSearchParamsQuery } from "@/features/rickmorty/shared/useSearchParamsQuery.ts";
 import { Pagination } from "./Pagination";
 import { Button, Input, Select } from "@/shared/ui";
+
+export type ControlBarFormValues = {
+  resource: ResourceType;
+  name: string;
+  dir: "asc" | "desc";
+  status: CharacterStatus | "";
+  gender: CharacterGender | "";
+  episode: string;
+  type: string;
+  dimension: string;
+  page?: number;
+};
 
 const RESOURCES: ResourceType[] = ["characters", "episodes", "locations"];
 

@@ -45,3 +45,15 @@ export type ResourceMap = {
 };
 
 export type Resource = Location | Character | Episode;
+
+export type Filter = {
+  resource: ResourceType;
+  name: string;
+  dir: "asc" | "desc";
+  status: CharacterStatus | "";
+  gender: CharacterGender | "";
+  episode: string;
+  type: string;
+  dimension: string;
+  page?: number;
+};

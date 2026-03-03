@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState} from "react";
 import { useSearchParams } from "react-router-dom";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 
@@ -18,12 +18,38 @@ export function useSearchParamsQuery() {
   const type = sp.get("type") || "";
   const dimension = sp.get("dimension") || "";
 
-  const set = (patch: Record<string, string | undefined>, resetPage = true) => {
+const [drafts, setDrafts] = useState<Record<string, string>>({
+  name,
+  episode,
+  type,
+  dimension,
+});
+
+const set = useCallback(
+  (patch: Record<string, string | undefined>, resetPage = true) => {
     const next = new URLSearchParams(sp);
     Object.entries(patch).forEach(([k, v]) => (v ? next.set(k, v) : next.delete(k)));
     if (resetPage) next.set("page", "1");
     setSp(next);
-  };
+
+    setDrafts((d) => ({
+      ...d,
+      ...Object.fromEntries(
+        Object.entries(patch).map(([k, v]) => [k, v ?? ""])
+      ),
+    }));
+  },
+  [sp, setSp]
+);
+
+const bindText = (key: "name" | "episode" | "type" | "dimension", delayMs = 300) => ({
+  value: drafts[key] ?? "",
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    setDrafts((d) => ({ ...d, [key]: v })); // re-render inmediato ✅
+    setDebounced({ [key]: v }, delayMs);    // URL tras debounce ✅
+  },
+});
 
   const timers = useRef<Record<string, number>>({});
   const setDebounced = (patch: Record<string, string | undefined>, delayMs = 300, resetPage = true) => {
@@ -35,38 +61,8 @@ export function useSearchParamsQuery() {
     });
   };
 
-  // ✅ local drafts for text inputs (so typing feels normal)
-  const [drafts, setDrafts] = useState<Record<string, string>>({
-    name,
-    episode,
-    type,
-    dimension,
-  });
-
-  // keep drafts in sync when URL changes externally (back/forward, clear, etc.)
-  useEffect(() => {
-    setDrafts((d) => ({
-      ...d,
-      name,
-      episode,
-      type,
-      dimension,
-    }));
-  }, [name, episode, type, dimension]);
-
-  const bindText = (key: "name" | "episode" | "type" | "dimension", delayMs = 300) => {
-    return {
-      value: drafts[key] ?? "",
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = e.target.value;
-        setDrafts((d) => ({ ...d, [key]: v }));          // immediate UI update
-        setDebounced({ [key]: v }, delayMs, true);       // debounced URL update
-      },
-    };
-  };
-
   const params = useMemo(() => {
-    const base: any = { page, name };
+    const base = { page, name };
     if (resource === "characters") return { ...base, status: status || undefined, gender: gender || undefined };
     if (resource === "episodes") return { ...base, episode: episode || undefined };
     return { ...base, type: type || undefined, dimension: dimension || undefined };

@@ -2,10 +2,16 @@ import React from "react";
 import { ItemCard } from "@/features/rickmorty/shared/ItemCard";
 import { useRelatedItems } from "@/features/rickmorty/hooks/useRelatedItems";
 import { Spinner } from "@/shared/ui";
+import type { Resource, ResourceType } from "@/features/rickmorty/model/types";
 
 const STEP = 8;
 
-export function RelatedCarousel({ resource, item }: { resource: any; item: any }) {
+type Props = {
+    resource: ResourceType;
+    item: Resource;
+};
+
+export function RelatedCarousel({ resource, item }: Props) {
     const [limit, setLimit] = React.useState(STEP);
     const scrollerRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -43,7 +49,7 @@ export function RelatedCarousel({ resource, item }: { resource: any; item: any }
                 onScroll={onScroll}
                 className="flex gap-3 overflow-x-auto pb-2"
             >
-                {relatedItems.map((it: any) => (
+                {relatedItems.map((it: Resource) => (
                     <div key={`${relatedResource}-${it.id}`} className="min-w-[240px]">
                         <ItemCard resource={relatedResource} item={it} />
                     </div>
