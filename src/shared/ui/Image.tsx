@@ -10,6 +10,8 @@ export function Image({
   alt,
   onError,
   placeholder = '../assets/CharacterPlaceHolder.png',
+  loading = "lazy",
+  decoding = "async",
   ...rest
 }: ImageProps) {
   const currentSrc = src?.trim() ? src : placeholder;
@@ -19,6 +21,8 @@ export function Image({
       {...rest}
       alt={alt}
       src={currentSrc}
+      loading={loading}
+      decoding={decoding}
       onError={(e) => {
         onError?.(e);
       }}

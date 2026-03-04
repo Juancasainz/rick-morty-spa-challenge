@@ -3,7 +3,10 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useResourceDetails } from "@/features/rickmorty/hooks/useResourceDetails";
 import { getItemImage, isCharacter, isEpisode, isLocation, isResourceType } from "@/features/rickmorty/shared/resourceConfig";
 import { Button, Field, Image, Spinner } from "@/shared/ui";
-import { RelatedCarousel } from "./components/RelatedCarousel";
+
+const RelatedCarousel = React.lazy(() =>
+  import("./components/RelatedCarousel").then((m) => ({ default: m.RelatedCarousel }))
+);
 
 export const RickMortyDetailPage: React.FC = () => {
   const params = useParams();
@@ -71,7 +74,11 @@ export const RickMortyDetailPage: React.FC = () => {
           </div>
         </section>
       )}
-      {item && <RelatedCarousel resource={resource} item={item} />}
+      {item && (
+        <React.Suspense fallback={<Spinner />}>
+          <RelatedCarousel resource={resource} item={item} />
+        </React.Suspense>
+      )}
     </div>
   );
 };

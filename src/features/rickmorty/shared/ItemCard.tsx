@@ -9,7 +9,7 @@ type Props = {
   item: Resource;
 };
 
-export const ItemCard: React.FC<Props> = ({ resource, item }) => {
+const ItemCardComponent: React.FC<Props> = ({ resource, item }) => {
   const location = useLocation();
   const subtitle = getItemSubtitle(resource, item);
   const imageSrc = getItemImage(resource, item);
@@ -32,3 +32,6 @@ export const ItemCard: React.FC<Props> = ({ resource, item }) => {
     </Link>
   );
 };
+
+export const ItemCard = React.memo(ItemCardComponent);
+ItemCard.displayName = "ItemCard";

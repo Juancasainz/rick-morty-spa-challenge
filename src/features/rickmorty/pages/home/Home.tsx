@@ -9,6 +9,13 @@ import type { Filter } from "../../model/types";
 export const RickMortyHomePage: React.FC = () => {
   const q = useSearchParamsQuery();
   const { items, info, isLoading, error } = useResourceList(q.resource, q.params as Filter, q.dir);
+  const cards = React.useMemo(
+    () =>
+      items.map((item) => (
+        <ItemCard key={`${q.resource}-${item.id}`} resource={q.resource} item={item} />
+      )),
+    [items, q.resource]
+  );
 
   return (
     <div className="space-y-4">
@@ -25,9 +32,7 @@ export const RickMortyHomePage: React.FC = () => {
 
       {!isLoading && !error && (
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {items.map((item) => (
-            <ItemCard key={`${q.resource}-${item.id}`} resource={q.resource} item={item} />
-          ))}
+          {cards}
         </section>
       )}
     </div>
