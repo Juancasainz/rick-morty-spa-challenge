@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useResourceDetails } from "@/features/rickmorty/hooks/useResourceDetails";
 import { getItemImage, isCharacter, isEpisode, isLocation, isResourceType } from "@/features/rickmorty/shared/resourceConfig";
 import { Button, Field, Image, Spinner } from "@/shared/ui";
@@ -7,8 +7,10 @@ import { RelatedCarousel } from "./components/RelatedCarousel";
 
 export const RickMortyDetailPage: React.FC = () => {
   const params = useParams();
+  const location = useLocation();
   const resource = isResourceType(params.resource) ? params.resource : "characters";
   const id = params.id ?? "";
+  const backTo = (location.state as { from?: string } | null)?.from ?? `/?resource=${resource}`;
 
   const { item, isLoading, error } = useResourceDetails(resource, id);
   const imageSrc = item ? getItemImage(resource, item) : undefined;
@@ -16,7 +18,7 @@ export const RickMortyDetailPage: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Link to={`/?resource=${resource}`}>
+        <Link to={backTo}>
           <Button>← Back</Button>
         </Link>
         <span className="text-sm ">{resource} details</span>
@@ -69,7 +71,7 @@ export const RickMortyDetailPage: React.FC = () => {
           </div>
         </section>
       )}
-      <RelatedCarousel resource={resource} item={item} />
+      {item && <RelatedCarousel resource={resource} item={item} />}
     </div>
   );
 };

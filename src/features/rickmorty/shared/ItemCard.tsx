@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { Resource, ResourceType } from "@/features/rickmorty/model/types";
 import { getItemImage, getItemSubtitle } from "@/features/rickmorty/shared/resourceConfig";
 import { Image } from "@/shared/ui";
@@ -10,12 +10,14 @@ type Props = {
 };
 
 export const ItemCard: React.FC<Props> = ({ resource, item }) => {
+  const location = useLocation();
   const subtitle = getItemSubtitle(resource, item);
   const imageSrc = getItemImage(resource, item);
 
   return (
     <Link
       to={`/${resource}/${item.id}`}
+      state={{ from: `${location.pathname}${location.search}` }}
       className="block rounded-2xl border border-black/10 bg-white overflow-hidden hover:shadow-sm transition"
       aria-label={`Open details for ${item.name}`}
     >
