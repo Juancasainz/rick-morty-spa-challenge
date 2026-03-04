@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { ItemCard } from "./ItemCard";
-import type { Character, Episode, Episode } from "../model/types";
+import { ItemCard } from "../../src/features/rickmorty/shared/ItemCard";
+import type { Character, Episode } from "../../src/features/rickmorty/model/types";
 
 describe("ItemCard", () => {
   it("renders character title, subtitle and link", () => {

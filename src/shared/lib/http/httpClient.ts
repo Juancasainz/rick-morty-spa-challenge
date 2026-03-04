@@ -23,6 +23,11 @@ const inFlight = new Map<string, Promise<unknown>>();
 
 const DEFAULT_TTL_MS = 500_000;
 
+export function __clearHttpCacheForTests() {
+  responseCache.clear();
+  inFlight.clear();
+}
+
 export async function getJson<T>(
   path: string,
   opts?: { query?: Query; signal?: AbortSignal; cacheTtlMs?: number }

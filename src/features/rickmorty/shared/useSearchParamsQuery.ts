@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useRef, useState} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { ResourceType } from "@/features/rickmorty/model/types";
 
@@ -17,41 +18,47 @@ export function useSearchParamsQuery() {
   const episode = sp.get("episode") || "";
   const type = sp.get("type") || "";
   const dimension = sp.get("dimension") || "";
-
-const [drafts, setDrafts] = useState<Record<string, string>>({
-  name,
-  episode,
-  type,
-  dimension,
-});
-
-const set = useCallback(
-  (patch: Record<string, string | undefined>, resetPage = true) => {
-    const next = new URLSearchParams(sp);
-    Object.entries(patch).forEach(([k, v]) => (v ? next.set(k, v) : next.delete(k)));
-    if (resetPage) next.set("page", "1");
-    setSp(next);
-
-    setDrafts((d) => ({
-      ...d,
-      ...Object.fromEntries(
-        Object.entries(patch).map(([k, v]) => [k, v ?? ""])
-      ),
-    }));
-  },
-  [sp, setSp]
-);
-
-const bindText = (key: "name" | "episode" | "type" | "dimension", delayMs = 300) => ({
-  value: drafts[key] ?? "",
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value;
-    setDrafts((d) => ({ ...d, [key]: v })); // re-render inmediato ✅
-    setDebounced({ [key]: v }, delayMs);    // URL tras debounce ✅
-  },
-});
+  const liveTextValues = { name, episode, type, dimension } as const;
 
   const timers = useRef<Record<string, number>>({});
+  const [drafts, setDrafts] = useState<Record<string, string>>({
+    name,
+    episode,
+    type,
+    dimension,
+  });
+
+  useEffect(() => {
+    const timersAtUnmount = timers.current;
+    return () => {
+      Object.values(timersAtUnmount).forEach((id) => window.clearTimeout(id));
+    };
+  }, []);
+
+  const set = useCallback(
+    (patch: Record<string, string | undefined>, resetPage = true) => {
+      setSp((prev) => {
+        const next = new URLSearchParams(prev);
+        Object.entries(patch).forEach(([k, v]) => (v ? next.set(k, v) : next.delete(k)));
+        if (resetPage) next.set("page", "1");
+        return next;
+      });
+
+      setDrafts((d) => ({
+        ...Object.fromEntries(Object.entries(d).filter(([k]) => !(k in patch))),
+      }));
+    },
+    [setSp]
+  );
+
+    const bindText = (key: "name" | "episode" | "type" | "dimension", delayMs = 300) => ({
+    value: drafts[key] ?? liveTextValues[key],
+    onChange: (e: ChangeEvent<HTMLInputElement>) => {
+      const v = e.target.value;
+      setDrafts((d) => ({ ...d, [key]: v }));
+      setDebounced({ [key]: v }, delayMs);
+    },
+  });
   const setDebounced = (patch: Record<string, string | undefined>, delayMs = 300, resetPage = true) => {
     Object.entries(patch).forEach(([key, value]) => {
       window.clearTimeout(timers.current[key]);
